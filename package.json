@@ -1,0 +1,12 @@
+{
+  "name": "vidjot",
+  "version": "1.0.0",
+  "description": "Exercise: create app with ME-N (Udemy) ",
+  "main": "app.js",
+  "author": "Maud de Vries <F3PiXnl@gmail.com>",
+  "license": "MIT",
+  "private": null,
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
