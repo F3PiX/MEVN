@@ -32,6 +32,7 @@ app.get('/', (req, res) => {
 app.get('/about', (req, res) => {
   res.render('about'); 
 });
+
 app.get('/ideas', (req, res) => {
   Idea.find({})
     .sort({date: 'desc'})
@@ -43,6 +44,14 @@ app.get('/ideas', (req, res) => {
 });
 app.get('/ideas/add', (req, res) => {
   res.render('ideas/add');
+});
+app.get('/ideas/edit/:id', (req, res) => {
+  Idea.findOne({
+    _id: req.params.id
+  })
+  .then(idea => {
+    res.render('ideas/edit', {idea: idea});
+  });
 });
 app.post('/ideas', (req, res) => {
   let errors = [];
