@@ -1,6 +1,7 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 const app = express(); //this will init the application
 mongoose.Promise = global.Promise;
@@ -13,11 +14,13 @@ require('./models/Idea');
 const Idea = mongoose.model('ideas');  
 
 
-// Handlebars middleware
+// Middlewares
 app.engine('handlebars', exphbs({
   defaultLayout: 'main'
 }));
 app.set('view engine', 'handlebars');
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 //routes
 app.get('/', (req, res) => {
@@ -32,6 +35,21 @@ app.get('/about', (req, res) => {
 app.get('/ideas/add', (req, res) => {
   res.render('ideas/add');
 });
+app.post('/ideas', (req, res) => {
+  let errors = [];
+  if(!req.body.title){
+    errors.push({text: "Please add a title"});
+  }
+  if(errors.length > 0) { 
+    res.render('ideas/add', {
+      errors: errors,
+      title: req.body.title,
+      details: req.body.details
+    });
+  } else {
+    res.send("Form submitted");
+  }
+}); 
 
 const port = 5000;
 //take the app and listen :
