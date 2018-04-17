@@ -1,5 +1,6 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
+const methodOverride = require('method-override')
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
@@ -19,8 +20,9 @@ app.engine('handlebars', exphbs({
   defaultLayout: 'main'
 }));
 app.set('view engine', 'handlebars');
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(methodOverride('_method'));
 
 //routes
 app.get('/', (req, res) => {
@@ -76,6 +78,10 @@ app.post('/ideas', (req, res) => {
       })
     }
 }); 
+
+app.put('/ideas/:id', (req, res) => {
+  res.send("PUT");
+});
 
 const port = 5000;
 //take the app and listen :
