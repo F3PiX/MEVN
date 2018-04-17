@@ -4,6 +4,8 @@ const methodOverride = require('method-override')
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
+
+// Set up and connect to server
 const app = express(); //this will init the application
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/vidjot-dev')
@@ -24,7 +26,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));
 
-//routes
+
+// Routes
 app.get('/', (req, res) => {
   const title = "This title is passed in via the routes";
   res.render('index', {
@@ -80,9 +83,19 @@ app.post('/ideas', (req, res) => {
 }); 
 
 app.put('/ideas/:id', (req, res) => {
-  res.send("PUT");
+  Idea.findOne({
+    _id: req.params.id
+  })
+  .then(idea => {
+    idea.title = req.body.title;
+    idea.details = req.body.details;
+    idea.save()
+      .then(idea => {res.redirect('/ideas');})
+  });
 });
 
+
+// LISTEN
 const port = 5000;
 //take the app and listen :
 app.listen(port, () => {
